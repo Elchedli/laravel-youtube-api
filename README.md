@@ -1,5 +1,5 @@
 
-<h2>Video tutorial : </h2> <a>https://www.youtube.com/watch?v=YGqCZjdgJJk</a><br>
+<h2>Video tutorial : </h2> <a href="https://www.youtube.com/watch?v=YGqCZjdgJJk">Visit W3Schools.com!</a><br>
 <h1>Execution : </h1>
 <b>To launch Laravel app : </b> <span>php artisan serve</span><br>
 <b>To create controller : </b> <span>php artisan make:controller $nameController</span><br>
