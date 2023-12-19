@@ -18,8 +18,8 @@ class CreateInvoicesTable extends Migration
             $table->integer('customer_id');
             $table->integer('amount');
             $table->string('status'); // Billed,Paid,Void
-            $table->string('billed_dated'); 
-            $table->string('paid_dated')->nullable();
+            $table->string('billed_date'); 
+            $table->string('paid_date')->nullable();
             $table->timestamps();
         });
     }

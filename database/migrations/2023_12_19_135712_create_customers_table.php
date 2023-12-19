@@ -21,7 +21,7 @@ class CreateCustomersTable extends Migration
             $table->string('address'); 
             $table->string('city'); 
             $table->string('state'); 
-            $table->string('postal_code '); 
+            $table->string('postal_code'); 
             $table->timestamps();
         });
     }
