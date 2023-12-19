@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\studentController;
 use App\Http\Controllers\UsersController;
@@ -13,7 +14,6 @@ use App\Http\Controllers\UsersController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 
 //Routing part
 Route::get('/welcome', function () {
@@ -41,10 +41,19 @@ Route::get('/student1', function () {
 // Route::get('/student',[studentController::class,'Student']);
 
 //Method 2
-Route::get('student','App\Http\Controllers\studentController@Student');
-
-
+Route::get('student', 'App\Http\Controllers\studentController@Student');
 
 //Passing data part
 
-Route::get('users',[UsersController::class,'getUsers']);
+Route::get('users', [UsersController::class, 'getUsers']);
+
+//blade template
+Route::get('/template', function () {
+    return view('template');
+});
+
+Route::get('/register', function () {
+    return view('register');
+});
+
+Route::post('/register',[RegisterController::class,'getUser']);

@@ -1,8 +1,8 @@
 <h1>Execution : </h1>
-<b>To launch Laravel app : </b> <span>php artisan serve</span>
-<br>
-<b>To create controller : </b> <span>php artisan make:controller $nameController</span>
-
+<b>To launch Laravel app : </b> <span>php artisan serve</span><br>
+<b>To create controller : </b> <span>php artisan make:controller $nameController</span><br>
+<b>To create a model in the database : </b> <span>php artisan make:model $modelName -m</span><br>
+<b>Affect changes in database : </b> <span>php artisan migrate</span><br>
 <h1>VScode Extensions : </h1>
 <ul>
     <li>PHP Intelephense</li>
@@ -17,4 +17,5 @@
     <li>One Dark Pro</li>
     <li>Path intelissense</li>
     <li>Prettier</li>
+    <li>Laravel Blade formatter</li>
 </ul>
