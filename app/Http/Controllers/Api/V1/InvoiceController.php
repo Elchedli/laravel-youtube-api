@@ -16,6 +16,7 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
+        error_log('Some message here.');
         $filter = new InvoicesFilter();
         $queryItems = $filter->transform($request);
         if(count($queryItems) == 0) return new InvoiceCollection(Invoice::paginate());
