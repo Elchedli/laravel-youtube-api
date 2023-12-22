@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 
-Route::get('/','App\Http\Controllers\YoutubeController@index')->name('index');
-Route::get('/results','App\Http\Controllers\YoutubeController@results')->name('results');
-Route::get('/watch','App\Http\Controllers\YoutubeController@watch')->name('watch');
-
+Route::get('/searchVideo','App\Http\Controllers\YoutubeController@searchVideos')->name('searchVideos');
+Route::get('/test','App\Http\Controllers\YoutubeController@test')->name('test');
+Route::get('/ProfileData','App\Http\Controllers\YoutubeController@profile')->name('profile');
+Route::get('/ProfileAnalytics','App\Http\Controllers\YoutubeController@analytics')->name('analytics');
