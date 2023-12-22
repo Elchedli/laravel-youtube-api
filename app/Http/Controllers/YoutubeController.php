@@ -33,7 +33,7 @@ class YoutubeController extends Controller
         $results = json_decode($response);
         
         // We will create a json file to see our response 
-        File::put(storage_path(). '\app\public\results.json',$response->body());
+        File::put(storage_path(). '/app/public/results.json',$response->body());
         return $results;
     }
 }
