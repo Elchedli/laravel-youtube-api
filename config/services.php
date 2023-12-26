@@ -32,7 +32,11 @@ return [
 
     'youtube' => [
         'api_key' => env('YOUTUBE_API_KEY'),
-        'search_endpoint' => env('SEARCH_ENDPOINT')
+        'endpoint'=> env('YOUTUBE_ENDPOINT'),
+        'search_endpoint' => env('YOUTUBE_ENDPOINT')."search",
+        'channel_endpoint' => env('YOUTUBE_ENDPOINT')."channels",
+        'playlistitems_endpoint' => env('YOUTUBE_ENDPOINT')."playlistItems",
+        'videos_endpoint' => env('YOUTUBE_ENDPOINT')."videos"
     ]
 
 ];
