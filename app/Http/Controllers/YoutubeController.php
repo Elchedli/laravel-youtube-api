@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
+
 class YoutubeController extends Controller
 {
     protected $apiKey;
@@ -14,18 +17,14 @@ class YoutubeController extends Controller
         $this->apiKey = config('services.youtube.api_key');
         $this->youtubeEndPoint = config('services.youtube.endpoint');
     }
-
-    public function analytics()
-    {
-    }
-
+    
     //This controller will help us get all videos/shorts/recorder live videos in a channel
     public function profile()
     {
         $channelName = 'ooredootn';
         $channelData = $this->getChannelData($channelName);
         $playlistId = $channelData->items[0]->contentDetails->relatedPlaylists->uploads;
-        $channelVideos = $this->getAllVideos($playlistId);
+        $channelVideos = $this->asyncGetAllVideos($playlistId);
         return $channelVideos;
     }
 
@@ -50,6 +49,7 @@ class YoutubeController extends Controller
         //Max resutls can't surpass 50.
         $maxResults = 50;
         $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&token=''&maxResults=$maxResults&key=$this->apiKey";
+
         $response = Http::get($url);
         $partVideoPlaylist = json_decode($response);
         $nextPageToken = $partVideoPlaylist->nextPageToken;
@@ -74,59 +74,32 @@ class YoutubeController extends Controller
 
         return $tableofvideos;
     }
-    // protected function getAllVideos($playlistId) {
-    //     $part = 'snippet,id';
-    //     // Max results can't surpass 50.
-    //     $maxResults = 50;
-    //     $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&token=''&maxResults=$maxResults&key=$this->apiKey";
-    //     $response = Http::get($url);
-    //     $partVideoPlaylist = json_decode($response);
 
-    //     // Check if the response was successful
-    //     if (!$partVideoPlaylist || !isset($partVideoPlaylist->nextPageToken)) {
-    //         // Handle the error, e.g., log it and return an empty array
-    //         return [];
-    //     }
+    protected function asyncGetAllVideos($playlistId)
+    {
+        $client = new Client();
+        $part = 'snippet,id';
+        $maxResults = 50;
 
-    //     $nextPageToken = $partVideoPlaylist->nextPageToken;
-    //     $tableofvideos = $partVideoPlaylist->items;
-    //     info("url : ".$url."\n nextPageToken : ".$nextPageToken."\n tableofVideos : \n");
+        $allVideos = []; // Store all videos
+        $nextPageToken = '';
 
-    //     for ($i=0; $i < 10; $i++) {
-    //         $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&token=$nextPageToken&maxResults=$maxResults&key=$this->apiKey";
-    //         $response = Http::get($url);
-    //         $partVideoPlaylist = json_decode($response);
+        for ($i = 0; $i < 4; $i++) {
+            $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&pageToken=$nextPageToken&maxResults=$maxResults&key=$this->apiKey"; // Use pageToken instead of token
+            $promise = $client->requestAsync('GET', $url);
+            $response = $promise->wait();
+            $body = json_decode($response->getBody()->getContents());
+            // File::put(storage_path() . "/app/public/youtube$i.json", $response->getBody()->getContents());
+            // Append videos from the current response to the collection
+            $allVideos = array_merge($allVideos, [$body]);
 
-    //         // Check if the response was successful
-    //         if (!$partVideoPlaylist || !isset($partVideoPlaylist->nextPageToken)) {
-    //             // Handle the error, e.g., log it and break the loop
-    //             break;
-    //         }
+            $nextPageToken = $body->nextPageToken; // Update nextPageToken for the next iteration
+            info('New token: ' . $nextPageToken);
+        }
 
-    //         $nextPageToken = $partVideoPlaylist->nextPageToken;
-    //         // Use array_merge instead of array_push to merge arrays correctly
-    //         $tableofvideos = array_merge($tableofvideos, $partVideoPlaylist->items);
-    //         info("url : ".$url."\n nextPageToken : ".$nextPageToken."\n tableofVideos : \n");
-    //     }
-    //     while ($nextPageToken) {
-    //         $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&token=$nextPageToken&maxResults=$maxResults&key=$this->apiKey";
-    //         $response = Http::get($url);
-    //         $partVideoPlaylist = json_decode($response);
-
-    //         // Check if the response was successful
-    //         if (!$partVideoPlaylist || !isset($partVideoPlaylist->nextPageToken)) {
-    //             // Handle the error, e.g., log it and break the loop
-    //             break;
-    //         }
-
-    //         $nextPageToken = $partVideoPlaylist->nextPageToken;
-    //         // Use array_merge instead of array_push to merge arrays correctly
-    //         $tableofvideos = array_merge($tableofvideos, $partVideoPlaylist->items);
-    //         info("url : ".$url."\n nextPageToken : ".$nextPageToken."\n tableofVideos : \n");
-    //     }
-
-    //     return $tableofvideos;
-    // }
+        // Return all videos collected across multiple requests
+        return $allVideos;
+    }
 
     // we get a table of video ID's with getAllVideos that we gonna use to filter category of videos (shorts,videos,live records) and gettings statistics for each video (comments,likes,views...)
     protected function getVideosContent($tableVideosIDs)
