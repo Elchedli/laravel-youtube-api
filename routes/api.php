@@ -21,4 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('/profile','App\Http\Controllers\YoutubeController@profile')->name('profile');
+Route::get('/testphp','App\Http\Controllers\YoutubeController@testphp')->name('testphp');
 // Route::get('/ProfileAnalytics','App\Http\Controllers\YoutubeController@analytics')->name('analytics');

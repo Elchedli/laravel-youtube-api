@@ -9,20 +9,30 @@ use GuzzleHttp\Promise;
 
 class YoutubeController extends Controller
 {
-    protected $apiKey;
-    protected $youtubeEndPoint;
+    private $apiKey;
+    private $youtubeEndPoint;
+
+    
 
     public function __construct()
     {
         $this->apiKey = config('services.youtube.api_key');
         $this->youtubeEndPoint = config('services.youtube.endpoint');
     }
+
     
+    public function testphp(){
+        $test = (object) array (
+            'happy' => 'cool life'
+        );
+        return isset($test->sleep);
+    }
+
     //This controller will help us get all videos/shorts/recorder live videos in a channel
     public function profile()
     {
-        $channelName = 'ooredootn';
-        $channelData = $this->getChannelData($channelName);
+        $idChannel = 'UCvqUz4adCLEpGyQjWXvcK_w';
+        $channelData = $this->getChannelData($idChannel);
         $playlistId = $channelData->items[0]->contentDetails->relatedPlaylists->uploads;
         $channelVideos = $this->asyncGetAllVideos($playlistId);
         return $channelVideos;
@@ -30,10 +40,10 @@ class YoutubeController extends Controller
 
     //this function get the basic information of a channel,the most important parts are statistics(viewCount,SubscriberCounts...)
     // In contentDetails that we added from $part we gonna get uploads id which give a playlist containing all videos/shorts/recorded lives in the channel
-    protected function getChannelData($forUsername)
+    protected function getChannelData($idChannel)
     {
         $part = 'snippet,id,statistics,contentDetails';
-        $url = "$this->youtubeEndPoint/channels?part=$part&forUsername=$forUsername&key=$this->apiKey";
+        $url = "$this->youtubeEndPoint/channels?part=$part&id=$idChannel&key=$this->apiKey";
         $response = Http::get($url);
         $channelInfo = json_decode($response);
         File::put(storage_path() . '/app/public/channel.json', $response->body());
@@ -81,21 +91,32 @@ class YoutubeController extends Controller
         $part = 'snippet,id';
         $maxResults = 50;
 
-        $allVideos = []; // Store all videos
+        $allVideos = [];
         $nextPageToken = '';
-
-        for ($i = 0; $i < 4; $i++) {
+            
+        while (isset($nextPageToken)) {
             $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&pageToken=$nextPageToken&maxResults=$maxResults&key=$this->apiKey"; // Use pageToken instead of token
             $promise = $client->requestAsync('GET', $url);
             $response = $promise->wait();
             $body = json_decode($response->getBody()->getContents());
-            // File::put(storage_path() . "/app/public/youtube$i.json", $response->getBody()->getContents());
-            // Append videos from the current response to the collection
-            $allVideos = array_merge($allVideos, [$body]);
-
-            $nextPageToken = $body->nextPageToken; // Update nextPageToken for the next iteration
-            info('New token: ' . $nextPageToken);
+            // array_push($allVideos,$body->items);
+            $nextPageToken = optional($body)->nextPageToken;
+            info("Previous Url : $url & New token: $nextPageToken");
+            $allVideos = array_merge($allVideos, $body->items);
         }
+
+        // for ($i = 0; $i < 4; $i++) {
+        //     $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&pageToken=$nextPageToken&maxResults=$maxResults&key=$this->apiKey"; // Use pageToken instead of token
+        //     $promise = $client->requestAsync('GET', $url);
+        //     $response = $promise->wait();
+        //     $body = json_decode($response->getBody()->getContents());
+        //     // File::put(storage_path() . "/app/public/youtube$i.json", $response->getBody()->getContents());
+        //     // Append videos from the current response to the collection
+        //     $allVideos = array_merge($allVideos, [$body]);
+        //     info('New token: ' . optional($body)->nextPageToken);
+        //     $nextPageToken = optional($body)->nextPageToken; // Update nextPageToken for the next iteration
+            
+        // }
 
         // Return all videos collected across multiple requests
         return $allVideos;
