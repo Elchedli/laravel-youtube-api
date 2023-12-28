@@ -24,10 +24,6 @@ class YoutubeController extends Controller
 
     
     public function testphp(){
-        $test = (object) array (
-            'happy' => 'cool life'
-        );
-        return isset($test->sleep);
     }
 
     //This controller will help us get all videos/shorts/recorder live videos in a channel
@@ -37,7 +33,10 @@ class YoutubeController extends Controller
         $channelData = $this->getChannelData($idChannel);
         $playlistId = $channelData->items[0]->contentDetails->relatedPlaylists->uploads;
         $channelVideos = $this->getAllVideos($playlistId);
-        return $channelVideos;
+        // return $channelVideos;
+        
+        // Jeb2PJ2tvXc => short | o3PqMxYIDH4 => normal video
+        return $this->getVideosContent($channelVideos);
     }
 
     //this function get the basic information of a channel,the most important parts are statistics(viewCount,SubscriberCounts...)
@@ -63,26 +62,31 @@ class YoutubeController extends Controller
             
         while (isset($nextPageToken)) {
             $url = "$this->youtubeEndPoint/playlistItems?part=$part&playlistId=$playlistId&pageToken=$nextPageToken&maxResults=$maxResults&key=$this->apiKey"; // Use pageToken instead of token
-            $response = Http::get($url);
-            $body = json_decode($response);
+            $body = json_decode(Http::get($url));
             $nextPageToken = optional($body)->nextPageToken;
             $allVideos = array_merge($allVideos, $body->items);
         }
         
-        $allvideosids = array_map(function($singleVideo) {
-            return $singleVideo->snippet->resourceId->videoId;
-        }, $allVideos);
-        return areAllValuesUnique($allvideosids);
+        $allvideosids = array_map(fn($singleVideo) => $singleVideo->snippet->resourceId->videoId, $allVideos);
+        return $allvideosids;
         
     }
 
+
+    // Jeb2PJ2tvXc normally short
+    // o3PqMxYIDH4 normally normal video
     // we get a table of video ID's with getAllVideos that we gonna use to filter category of videos (shorts,videos,live records) and gettings statistics for each video (comments,likes,views...)
     protected function getVideosContent($tableVideosIDs)
     {
-        $part = 'snippet,contentDetails,statistics,localizations';
-        // $maxResults = 50;
-        $url = "$this->youtubeEndPoint/videos?part=$part&id=$tableVideosIDs&key=$this->apiKey";
-        $response = Http::get($url);
-        return json_decode($response);
+        $part = 'snippet,contentDetails,statistics,player,liveStreamingDetails';
+        $allVideos = [];
+        while(!empty($tableVideosIDs)){
+            $videoTable = array_splice($tableVideosIDs, 0, 50);
+            info("videoTable size : ".count($videoTable));
+            $url = "$this->youtubeEndPoint/videos?part=$part&id=".implode(',',$videoTable)."&key=$this->apiKey";
+            $body = json_decode(Http::get($url));
+            $allVideos = array_merge($allVideos, $body->items);
+        }
+        return $allVideos;
     }
 }
