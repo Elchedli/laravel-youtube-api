@@ -67,7 +67,6 @@ class YoutubeController extends Controller
         $allVideos = [];
         while (!empty($tableVideosIDs)) {
             $videoTable = array_splice($tableVideosIDs, 0, 50);
-            info('videoTable size : ' . count($videoTable));
             $url = "$this->youtubeEndPoint/videos?part=$part&id=" . implode(',', $videoTable) . "&key=$this->apiKey";
             $body = json_decode(Http::get($url));
             $allVideos = array_merge($allVideos, $body->items);

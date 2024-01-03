@@ -37,6 +37,11 @@ return [
         'channel_endpoint' => env('YOUTUBE_ENDPOINT')."channels",
         'playlistitems_endpoint' => env('YOUTUBE_ENDPOINT')."playlistItems",
         'videos_endpoint' => env('YOUTUBE_ENDPOINT')."videos"
-    ]
+    ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => 'https://your-domain/api/callback', // Adjust redirect URL for API backend
+    ],
 ];
