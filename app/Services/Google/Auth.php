@@ -2,22 +2,21 @@
 
 namespace App\Services\Google;
 
+use Illuminate\Support\Facades\Crypt;
 use Laravel\Socialite\Facades\Socialite;
 
-trait Auth {
-
+trait Auth
+{
     public function authRedirect()
     {
         $provider = 'google';
-        $scopes = [
-            'read_insights', 'pages_read_engagement', 'email', 'public_profile',
-            'instagram_basic', 'instagram_manage_insights', 'pages_manage_posts',
-        ];
+        $googlepath = "https://www.googleapis.com/auth";
+        $scopes = ["$googlepath/yt-analytics.readonly", "$googlepath/yt-analytics-monetary.readonly", "$googlepath/userinfo.profile"];
+        // $scopes = ['openid', 'profile', 'email']; // Adjust scopes as needed
         $d = Socialite::driver($provider)->stateless();
         $d->redirectUrl(secure_url(route('api.authCallback', ['provider' => $provider])));
-        $d->asPopup()->reRequest();
         $d->scopes($scopes);
-        $d->with(['display' => 'popup', 'auth_type' => 'rerequest']);
+        $d->with(['access_type' => 'offline', 'prompt' => 'consent select_account']);
         return $d->redirect();
     }
 
@@ -27,8 +26,9 @@ trait Auth {
         $d = Socialite::driver($provider)->stateless();
         $d->redirectUrl(secure_url(route('api.authCallback', ['provider' => $provider])));
         $p = ['type' => $provider, 'payload' => $d->user()];
+        // dd($p);
         return [
-            'data' => \Crypt::encryptString(json_encode($p)),
+            'data' => Crypt::encryptString(json_encode($p)),
             'pages' => $this->getPages(data_get($p, 'payload.token')),
             'name' => data_get($p, 'payload.name'),
         ];

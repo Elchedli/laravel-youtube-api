@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SocialAccountsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,4 +23,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/profile','App\Http\Controllers\YoutubeController@profile')->name('profile');
 Route::get('/testphp','App\Http\Controllers\YoutubeController@testphp')->name('testphp');
+
+
+Route::group(['as' => 'api.'], function () {
+    Route::get('social-accounts/auth/{provider}', [SocialAccountsController::class, 'auth']);
+    Route::get('social-accounts/auth/{provider}/callback', [SocialAccountsController::class, 'authCallback'])->name('authCallback');
+});
+
 // Route::get('/ProfileAnalytics','App\Http\Controllers\YoutubeController@analytics')->name('analytics');

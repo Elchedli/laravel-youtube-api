@@ -18,6 +18,9 @@ class YoutubeController extends Controller
     public function testphp()
     {
         // Jeb2PJ2tvXc => short | o3PqMxYIDH4 => normal video
+        $part = 'snippet,id,statistics';
+        $url = "$this->youtubeEndPoint/channels?part=$part&mine=true&key=$this->apiKey";
+        return json_decode(Http::get($url));
     }
 
     //This controller will help us get all videos/shorts/recorder live videos in a channel
