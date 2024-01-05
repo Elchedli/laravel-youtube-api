@@ -7,11 +7,13 @@ use Laravel\Socialite\Facades\Socialite;
 
 trait Auth
 {
+    // TODO change this to login
+    // TODO refactor the code so this file is global having provider parameter
     public function authRedirect()
     {
         $provider = 'google';
         $googlepath = "https://www.googleapis.com/auth";
-        $scopes = ["$googlepath/yt-analytics.readonly", "$googlepath/yt-analytics-monetary.readonly", "$googlepath/userinfo.profile"];
+        $scopes = ["$googlepath/yt-analytics.readonly", "$googlepath/yt-analytics-monetary.readonly", "$googlepath/youtubepartner-channel-audit"];
         // $scopes = ['openid', 'profile', 'email']; // Adjust scopes as needed
         $d = Socialite::driver($provider)->stateless();
         $d->redirectUrl(secure_url(route('api.authCallback', ['provider' => $provider])));

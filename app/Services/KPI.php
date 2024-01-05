@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Services\Google\Google;
+use App\Services\Google\Youtube\Youtube;
 
 class KPI
 {
@@ -24,6 +25,7 @@ class KPI
     {
         $n = trim(strtolower($name));
         if ($n == 'google') $driver = Google::getInstance($newOne);
+        if ($n == 'youtube') $driver = Youtube::getInstance($newOne);
         else throw new \Exception(sprintf('Unsupported social driver %s', $name));
         return $driver;
     }

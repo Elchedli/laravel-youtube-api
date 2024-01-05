@@ -23,6 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/profile','App\Http\Controllers\YoutubeController@profile')->name('profile');
 Route::get('/testphp','App\Http\Controllers\YoutubeController@testphp')->name('testphp');
+// Route::get('/ProfileAnalytics','App\Http\Controllers\YoutubeController@analytics')->name('analytics');
 
 
 Route::group(['as' => 'api.'], function () {
@@ -30,4 +31,5 @@ Route::group(['as' => 'api.'], function () {
     Route::get('social-accounts/auth/{provider}/callback', [SocialAccountsController::class, 'authCallback'])->name('authCallback');
 });
 
-// Route::get('/ProfileAnalytics','App\Http\Controllers\YoutubeController@analytics')->name('analytics');
+
+// TODO Implement login and logout using Google (Hassen or Chedli)

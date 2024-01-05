@@ -7,11 +7,12 @@ class SocialAccountsController extends Controller
 {
     public function auth($provider)
     {
-        return \App\Services\KPI::getDriver($provider)->authRedirect();
+        return KPI::getDriver($provider)->authRedirect();
     }
 
     public function authCallback($provider)
     {
         $data = KPI::getDriver($provider)->authCB();
+        return $data;
     }
 }
