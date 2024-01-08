@@ -12,9 +12,11 @@ trait Auth
     public function authRedirect()
     {
         $provider = 'google';
-        $googlepath = "https://www.googleapis.com/auth";
+        $googlepath = 'https://www.googleapis.com/auth';
         $scopes = ["$googlepath/yt-analytics.readonly", "$googlepath/yt-analytics-monetary.readonly", "$googlepath/youtubepartner-channel-audit"];
-        // $scopes = ['openid', 'profile', 'email']; // Adjust scopes as needed
+        /**
+         * @disregard P1009 Undefined type
+         */
         $d = Socialite::driver($provider)->stateless();
         $d->redirectUrl(secure_url(route('api.authCallback', ['provider' => $provider])));
         $d->scopes($scopes);
@@ -25,13 +27,16 @@ trait Auth
     public function authCB()
     {
         $provider = 'google';
+        /**
+         * @disregard P1009 Undefined type
+         */
         $d = Socialite::driver($provider)->stateless();
         $d->redirectUrl(secure_url(route('api.authCallback', ['provider' => $provider])));
         $p = ['type' => $provider, 'payload' => $d->user()];
-        // dd($p);
+        dd($p);
         return [
             'data' => Crypt::encryptString(json_encode($p)),
-            'pages' => $this->getPages(data_get($p, 'payload.token')),
+            // 'pages' => $this->registerFlow(data_get($p, 'payload.token')),
             'name' => data_get($p, 'payload.name'),
         ];
     }

@@ -15,4 +15,8 @@ class SocialAccountsController extends Controller
         $data = KPI::getDriver($provider)->authCB();
         return $data;
     }
+
+    public function getAllSocialMediaData($provider){
+        return KPI::getDriver($provider)->saveExtractedData();
+    }
 }
