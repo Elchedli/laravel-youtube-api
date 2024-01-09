@@ -38,10 +38,4 @@ class KPI
     {
         throw new \Exception('Abstract method call');
     }
-    
-    public function saveExtractedData()
-    {
-        throw new \Exception('Abstract method call');
-    }
-   
 }

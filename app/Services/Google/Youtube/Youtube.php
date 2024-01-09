@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Services\Google\Youtube;
-
-use App\Services\Google\Google;
 use App\Services\Google\Youtube\APIFetching\YoutubeDataAPI;
 
 class Youtube
@@ -21,8 +19,10 @@ class Youtube
     }
 
 
-    //use Google Token 
+    //TODO use Google Token
     //This function will help us get channel details and all videos/shorts/lives in a channel
+
+    //Token parameter is not needed if we gonna use $this->Token
     function fetchDataAPI($token)
     {
         $channelData = $this->getChannelData($token);

@@ -4,6 +4,8 @@ namespace App\Services\Google;
 use App\Services\Google\Auth;
 use App\Services\Google\Youtube\Youtube;
 use App\Services\KPI;
+use Illuminate\Support\Facades\Crypt;
+
 class Google extends KPI {
 
     use Auth;
@@ -30,8 +32,17 @@ class Google extends KPI {
         or it takes id so it can fetch account details from the internet
         should also include a database management so it can register the refresh_token in the database
     */
-    function registerFlow($access_token)
+    function registerFlow($encryptedPayload)
     {
+        $payload = json_decode(Crypt::decryptString($encryptedPayload))->payload;
+
+        $user = $payload->user;
+        $refresh_token = $payload-> refreshToken;
+        
+        dd($user,$refresh_token);
+
+        //Voir dans la base de données si l'utilisateur existe
+        //
 
         //TODO Enregistre l'utilisateur avec son username,GoogleRefreshToken (verification id pour bien s'assurer qu'il est unique) dés son premier Auth
         
@@ -46,8 +57,9 @@ class Google extends KPI {
 
 
 
-        $url = 'https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true&access_token=' . $access_token;
-        info("access token $access_token");
+        // $url = 'https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true&access_token=' . $access_token;
+        // info("access token $access_token");
+        
         // $data = json_decode(Http::get($url));
         // return $data;
     }
