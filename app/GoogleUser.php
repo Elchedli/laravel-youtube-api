@@ -9,7 +9,15 @@ class GoogleUser extends Model
 {
     use HasFactory;
 
-    public function googleUser(){
-        
+    protected $fillable = [
+        'id', 
+        'name', 
+        'email', 
+        'thumbnailURL', 
+        'refreshToken'
+    ];
+
+    public function googleUser()
+    {
     }
 }

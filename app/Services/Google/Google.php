@@ -1,27 +1,35 @@
 <?php
 
 namespace App\Services\Google;
+
+use App\GoogleUser;
 use App\Services\Google\Auth;
 use App\Services\Google\Youtube\Youtube;
 use App\Services\KPI;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 
-class Google extends KPI {
+class Google extends KPI
+{
 
     use Auth;
 
     private $youtube;
 
-    function __construct() {
+    function __construct()
+    {
         $this->youtube = new Youtube();
     }
 
-    public function getYoutube() {
+    public function getYoutube()
+    {
         return $this->youtube;
-    } 
+    }
 
-    public function Service($serviceChoice) {
-        return match($serviceChoice){
+    public function Service($serviceChoice)
+    {
+        return match ($serviceChoice) {
             'youtube' => $this->youtube,
             //Add analytics after
         };
@@ -29,32 +37,43 @@ class Google extends KPI {
 
     /* TODO 
         After login/registration this function is called and it serves to get google account data so we can finish registion easily 
-        or it takes id so it can fetch account details from the internet
-        should also include a database management so it can register the refresh_token in the database
+        or it takes id so it can fetch account details from database
     */
     function registerFlow($encryptedPayload)
     {
         $payload = json_decode(Crypt::decryptString($encryptedPayload))->payload;
 
         $user = $payload->user;
-        $refresh_token = $payload-> refreshToken;
-        
-        
+        //with the user information we gonna include the refresh token too
+        $refresh_token = $payload->refreshToken;
 
 
-        // dd($user,$refresh_token);
+        return (object) ['refreshToken' => $refresh_token, 'getAccessToken' => ($this->getUserAccessToken($refresh_token))['access_token']] ;
+        try {
+            //Create new user by unique id
+            $user = GoogleUser::create([
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'thumbnailURL' => $user->picture,
+                'refreshToken' => $refresh_token
+            ]);
+        } catch (QueryException $e) {
+            //See in the database if user exist
+            $errorCode = $e->getCode();
+            $errorMessage = $e->getMessage();
+            //TODO Whenever we see a new error we change this
+            return match (intval($errorCode)) {
+                23000 => 'The user already exists in the database',
+                default => "newError $errorMessage",
+            };
+        }
 
-        //Voir dans la base de données si l'utilisateur existe
-        //
+        return "user is registred!";
 
-        //TODO Enregistre l'utilisateur avec son username,GoogleRefreshToken (verification id pour bien s'assurer qu'il est unique) dés son premier Auth
-        
-        //from the request you can get the name (pseudo), database : pseudo as id | Refresh_Token
 
-        // Ajout d'un Modal qui contient le 
-        
-        //Notif Register should be stateless but login and confirmation via email 
-        // Login should be with a session 
+
+        //TODO Register should be stateless but login and confirmation via email should not be stateless 
 
 
 
@@ -62,46 +81,27 @@ class Google extends KPI {
 
         // $url = 'https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true&access_token=' . $access_token;
         // info("access token $access_token");
-        
-        // $data = json_decode(Http::get($url));
-        // return $data;
     }
 
 
-    //TODO Need to do this function before Google Analytics
-    private function getUserAccessToken($user)
+
+    private function getAllUsersAuth()
     {
 
-        //Database is basically a modal variable in Laravel so it's an easy access, get Refresh token and return AccessToken
-        return "verifiedTokenThatWorkfromDatabase"; 
+    }
+    
+    //TODO Need to do this function before Google Analytics
+    private function getUserAccessToken($refresh_token)
+    {
 
-        
-        
-        // test if it's null else test existing Token in variable
-        
-        // if Token is expired  - Code to get new Token with refresh Token in the database.
+        $response = Http::asForm()
+            ->post('https://oauth2.googleapis.com/token', [
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $refresh_token,
+                'client_id' => config('services.google.client_id'),
+                'client_secret' => config('services.google.client_secret'),
+            ]);
 
-
-        //
-
-
-        
-        // TODO test token and refresh it while making the updates in the database (if needed)
-
-
-        //For now access_token is a static but i need 
-        // $access_token = 
-
-
-        // $this->variabley;
-        // $url = sprintf(
-        //     'https://graph.facebook.com/%s/oauth/access_token?client_id=%s&client_secret=%s&grant_type=client_credentials',
-        //     self::$graph_api_version,
-        //     config('facebook.facebook_app_id'),
-        //     config('facebook.facebook_app_secret')
-        // );
-        // $response = $this->client->get($url);
-        // $response = json_decode($response->getBody(), true);
-        // return $response['access_token'] ?? '';
+        return $response->successful() ? ($response->json())['access_token'] : 'Cannot retrieve Token'; 
     }
 }
