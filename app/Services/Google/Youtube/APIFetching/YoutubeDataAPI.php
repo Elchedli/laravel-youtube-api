@@ -4,6 +4,8 @@ namespace App\Services\Google\Youtube\APIFetching;
 
 use Illuminate\Support\Facades\Http;
 
+
+//TODO change functions to private by adding private function instead of just function
 trait YoutubeDataAPI
 {
      // this function get the basic information of a channel,the most important parts are statistics(viewCount,SubscriberCounts...)

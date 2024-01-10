@@ -39,7 +39,10 @@ class Google extends KPI {
         $user = $payload->user;
         $refresh_token = $payload-> refreshToken;
         
-        dd($user,$refresh_token);
+        
+
+
+        // dd($user,$refresh_token);
 
         //Voir dans la base de données si l'utilisateur existe
         //

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Services\KPI;
-use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Http;
 
 class SocialAccountsController extends Controller
 {
