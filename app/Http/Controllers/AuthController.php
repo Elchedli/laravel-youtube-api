@@ -12,13 +12,13 @@ use App\Providers\RouteServiceProvider;
 class AuthController extends Controller
 {
 
-    public function redirectToGoogle()
+    public function redirectToGoogle() : \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         return Socialite::driver('google')->redirect();
     }
 
 
-    public function handleGoogleCallback()
+    public function handleGoogleCallback(): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse
     {
         /**
          * @disregard P1009 Undefined type

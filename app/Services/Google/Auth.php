@@ -25,7 +25,7 @@ trait Auth
         return $d->redirect();
     }
 
-    public function authCB()
+    public function authCB(): array
     {
         $provider = 'google';
         /**
@@ -34,11 +34,11 @@ trait Auth
         $d = Socialite::driver($provider)->stateless();
         $d->redirectUrl(secure_url(route('api.authCallback', ['provider' => $provider])));
         $p = ['type' => $provider, 'payload' => $d->user()];
-        
+
         // File::put(storage_path(). '/app/public/userDetails.json',json_encode($p));
         return [
             'response' => 200,
-            'userIsRegistred' => $this->registerFlow(Crypt::encryptString(json_encode($p))),
+            'userIsRegistered' => $this->registerFlow(Crypt::encryptString(json_encode($p))),
         ];
     }
 }

@@ -11,7 +11,7 @@ class CreateGoogleUsersTable extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('google_users', function (Blueprint $table) {
             $table->string('id')->primary();
@@ -28,7 +28,7 @@ class CreateGoogleUsersTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('google_users');
     }

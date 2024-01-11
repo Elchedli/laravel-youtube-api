@@ -12,11 +12,10 @@ class GoogleUserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         GoogleUser::factory()
             ->count(10)
-            ->create();      
-        //
+            ->create();
     }
 }

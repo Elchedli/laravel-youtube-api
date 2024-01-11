@@ -10,7 +10,7 @@ class GoogleUserFactory extends Factory
 
     /**
      * The name of the factory's corresponding model
-     * 
+     *
      * @var string
      */
     /**
@@ -18,20 +18,21 @@ class GoogleUserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
-        
+
 
         return [
+            'id' => $this->faker->phoneNumber(),
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'thumbnailURL' => $this->getRedirectedUrl(),
-            'refreshToken' => $this->faker->bankAccountNumber() 
+            'refreshToken' => $this->faker->bankAccountNumber()
         ];
     }
 
 
-    private function getRedirectedUrl()
+    private function getRedirectedUrl() : string
     {
         $originalUrl = 'https://source.unsplash.com/random/800x600';
         $response = (object) Http::get($originalUrl);

@@ -20,21 +20,19 @@ trait YoutubeDataAPI
     //** Those are looping functions that uses a lot of quotas, there are consecutive in order */
 
 
-    function getAllVideosFiltered($channelID)
+    function getAllVideosFiltered($channelID): array
     {
-        
+
         $types = ['videos','shorts','live'];
         //Array_combine help so it can replicate the value as key instead of 0,1 as array values so array_map becomes easy
-        $allVideosFiltered = array_combine($types, array_map(fn ($type) => $this->getVideoPlaylistByType($type,$channelID),$types));
-
         //change the array to object
-        return $allVideosFiltered;
+        return array_combine($types, array_map(fn ($type) => $this->getVideoPlaylistByType($type,$channelID),$types));
     }
-    
+
 
 
     // we get a table of video ID's with getAllVideos that contains more informations about each video like (comments,likes,views...)
-    function getVideosContent($tableVideosIDs)
+    function getVideosContent($tableVideosIDs): array
     {
         $part = 'snippet,contentDetails,statistics,player,liveStreamingDetails';
         $allVideos = [];
@@ -50,7 +48,7 @@ trait YoutubeDataAPI
      // We have a limit of 10.000 quotas per day
     // Using the channelID that we got from getChannelData object we use youtube API playlist function because it uses the cheapest searching cost (1 quota)
     // Since we have 50 max results maximum per request we use a parameter in the url called nextPageToken, we can a portion of the data each request until we fully get all of them
-    function getVideoPlaylistByType($type, $channelID)
+    function getVideoPlaylistByType($type, $channelID): ?array
     {
         $part = 'snippet,id';
         $maxResults = 50;
