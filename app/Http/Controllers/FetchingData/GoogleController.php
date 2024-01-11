@@ -18,7 +18,6 @@ class GoogleController extends Controller
     public function fetchYoutubeData(): object
     {
         $userTokens = $this->Google->getAllUsersAuth();
-        // (object) ['channel' => $channelData, 'videos' => $this->getAllVideosFiltered($channelID)];
         return $this->Google->Service('youtube')->fetchDataAPI('give token here probably will be removed');
         return $this->Google->Service('youtube')->fetchChannelAnalytics();
 
