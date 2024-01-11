@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 use App\Services\KPI;
+use App\Providers\RouteServiceProvider;
 
 class SocialAccountsController extends Controller
 {
-    public function auth($provider)
+    /**
+     * @throws \Exception
+     */
+    public function auth($provider) : RouteServiceProvider
     {
         return KPI::getDriver($provider)->authRedirect();
     }
 
-    public function authCallback($provider)
+    /**
+     * @throws \Exception
+     */
+    public function authCallback($provider): array | string
     {
-        $data = KPI::getDriver($provider)->authCB();
-        return $data;
+        return KPI::getDriver($provider)->authCB();
     }
 }

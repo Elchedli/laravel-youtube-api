@@ -4,13 +4,13 @@ namespace App\Services;
 
 use App\Services\Google\Google;
 use App\Services\Google\Youtube\Youtube;
+use Exception;
 
 class KPI
 {
-    public $NAME = null;
-    public static $INSTANCE = null;
+    public static ?KPI $INSTANCE = null;
 
-    public static function getInstance($newOne = false)
+    public static function getInstance($newOne = false): static
     {
         if ($newOne) {
             return new static();
@@ -21,22 +21,30 @@ class KPI
         return self::$INSTANCE;
     }
 
-    public static function getDriver($name, $newOne = false)
+    /**
+     * @throws Exception
+     */
+    public static function getDriver($name, $newOne = false): Google
     {
         $n = trim(strtolower($name));
         if ($n == 'google') $driver = Google::getInstance($newOne);
-        if ($n == 'youtube') $driver = Youtube::getInstance($newOne);
-        else throw new \Exception(sprintf('Unsupported social driver %s', $name));
+        else throw new Exception(sprintf('Unsupported social driver %s', $name));
         return $driver;
     }
 
+    /**
+     * @throws Exception
+     */
     public function authCB()
     {
-        throw new \Exception('Abstract method call');
+        throw new Exception('Abstract method call');
     }
-    
+
+    /**
+     * @throws Exception
+     */
     public function authRedirect()
     {
-        throw new \Exception('Abstract method call');
+        throw new Exception('Abstract method call');
     }
 }
