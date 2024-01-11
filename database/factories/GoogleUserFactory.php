@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\GoogleUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Http;
 
@@ -13,6 +14,9 @@ class GoogleUserFactory extends Factory
      *
      * @var string
      */
+
+    protected $model = GoogleUser::class;
+
     /**
      * Define the model's default state.
      *

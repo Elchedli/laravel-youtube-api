@@ -5,12 +5,11 @@ namespace App\Services\Google\Youtube\APIFetching;
 use Illuminate\Support\Facades\Http;
 
 
-//TODO change functions to private by adding private function instead of just function
 trait YoutubeDataAPI
 {
      // this function get the basic information of a channel,the most important parts are statistics(viewCount,SubscriberCounts...)
     // In contentDetails that we added from $part we gonna get uploads id which give a playlist containing all videos/shorts/recorded lives in the channel
-    function getChannelData($idChannel)
+    private function getChannelData($idChannel)
     {
         $part = 'snippet,id,statistics';
         $url = "$this->youtubeEndPoint/channels?part=$part&id=$idChannel&key=$this->apiKey";
@@ -20,19 +19,20 @@ trait YoutubeDataAPI
     //** Those are looping functions that uses a lot of quotas, there are consecutive in order */
 
 
-    function getAllVideosFiltered($channelID): array
+    private function getAllVideosFiltered($channelID): array
     {
 
+        //This is the type of videos we can found in youtube categories, if needed we can add podcasts.
         $types = ['videos','shorts','live'];
-        //Array_combine help so it can replicate the value as key instead of 0,1 as array values so array_map becomes easy
-        //change the array to object
+        // Array_combine help so it can replicate the value as key instead of 0,1 as array values so array_map becomes easy
+        // Change the array to object
         return array_combine($types, array_map(fn ($type) => $this->getVideoPlaylistByType($type,$channelID),$types));
     }
 
 
 
     // we get a table of video ID's with getAllVideos that contains more informations about each video like (comments,likes,views...)
-    function getVideosContent($tableVideosIDs): array
+    private function getVideosContent($tableVideosIDs): array
     {
         $part = 'snippet,contentDetails,statistics,player,liveStreamingDetails';
         $allVideos = [];
@@ -48,7 +48,7 @@ trait YoutubeDataAPI
      // We have a limit of 10.000 quotas per day
     // Using the channelID that we got from getChannelData object we use youtube API playlist function because it uses the cheapest searching cost (1 quota)
     // Since we have 50 max results maximum per request we use a parameter in the url called nextPageToken, we can a portion of the data each request until we fully get all of them
-    function getVideoPlaylistByType($type, $channelID): ?array
+    private function getVideoPlaylistByType($type, $channelID): ?array
     {
         $part = 'snippet,id';
         $maxResults = 50;

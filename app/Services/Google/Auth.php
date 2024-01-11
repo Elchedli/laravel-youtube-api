@@ -8,8 +8,6 @@ use Laravel\Socialite\Facades\Socialite;
 
 trait Auth
 {
-    // TODO change this to login
-    // TODO refactor the code so this file is global having provider parameter
     public function authRedirect()
     {
         $provider = 'google';

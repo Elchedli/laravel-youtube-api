@@ -20,9 +20,8 @@ class Youtube
 
 
     //TODO use Google Token
-    //This function will help us get channel details and all videos/shorts/lives in a channel
-
     //Token parameter is not needed if we gonna use $this->Token
+    //This function will help us get channel details and all videos/shorts/lives in a channel
     function fetchDataAPI($token): object
     {
         $channelData = $this->getChannelData($token);
