@@ -13,25 +13,36 @@ class GoogleController extends Controller
         $this->Google = new Google();
     }
 
-     //TODO make this saveIndatabase function
-     //TODO make this updateAllUsers after updateUserData
-    public function fetchYoutubeData(): object
-    {
-        $userTokens = $this->Google->getAllUsersAuth();
-        return $this->Google->Service('youtube')->fetchDataAPI('give token here probably will be removed');
-        return $this->Google->Service('youtube')->fetchChannelAnalytics();
-
-        //TODO Return update succeeded if data extracted correctly
-        //See if async can be better in this condition
-    }
-
-
-
+    //those are controllers functions 
     public function testphp(){
-        return $this->Google->getAllUsersAuth();
+        return $this->fetchYoutubeUsersData();
     }
+
+
+
+
+    // This is youtube API part
+
     //TODO make this saveIndatabase function
-    function updateUserData($user){
+     //TODO make this updateAllUsers after updateUserData
+     private function fetchYoutubeUsersData(): object
+     {
+         $google = $this->Google;
+         $userTokens = $google->getAllUsersAuth();
+         $youtube = $google->Service('youtube');
+        //  dd($userTokens,gettype($userTokens[0]));
+         $data = $userTokens->map(fn ($user) => [
+             'DataAPI' => $youtube->fetchDataAPI($user->access_token),
+             'Analytics' =>  $youtube->fetchChannelAnalytics($user->access_token)
+         ]);
+ 
+         return $data;
+         //TODO Return update succeeded if data extracted correctly
+         //See if async can be better in this condition
+     }
+ 
+    //TODO make this saveIndatabase function
+    private function saveUserData($user){
         // $data = $this-
         // { Refetch user Token and get user data than save the updated data if needed }
         // if everything works fine return a good message

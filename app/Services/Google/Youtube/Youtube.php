@@ -29,7 +29,9 @@ class Youtube
         return (object) ['channel' => $channelData, 'videos' => $this->getAllVideosFiltered($channelID)];
     }
 
-    function fetchChannelAnalytics($period = "max"): null
+
+    //TODO maybe i need to add $period parameter
+    function fetchChannelAnalytics($access_token): null
     {
         return null;
     }

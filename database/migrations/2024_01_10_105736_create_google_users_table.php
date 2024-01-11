@@ -16,9 +16,9 @@ class CreateGoogleUsersTable extends Migration
         Schema::create('google_users', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('thumbnailURL');
-            $table->string('refreshToken');
+            $table->string('refreshToken')->unique();
             $table->timestamps();
         });
     }

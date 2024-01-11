@@ -9,10 +9,10 @@ trait YoutubeDataAPI
 {
      // this function get the basic information of a channel,the most important parts are statistics(viewCount,SubscriberCounts...)
     // In contentDetails that we added from $part we gonna get uploads id which give a playlist containing all videos/shorts/recorded lives in the channel
-    private function getChannelData($idChannel)
+    private function getChannelData($access_token)
     {
         $part = 'snippet,id,statistics';
-        $url = "$this->youtubeEndPoint/channels?part=$part&id=$idChannel&key=$this->apiKey";
+        $url = "$this->youtubeEndPoint/channels?part=$part&key=$this->apiKey&mine=true&access_token=$access_token";
         return json_decode(Http::get($url));
     }
 

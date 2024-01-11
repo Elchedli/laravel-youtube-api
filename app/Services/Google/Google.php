@@ -6,6 +6,7 @@ use App\GoogleUser;
 use App\Services\Google\Auth;
 use App\Services\Google\Youtube\Youtube;
 use App\Services\KPI;
+use Illuminate\Support\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
@@ -67,12 +68,12 @@ class Google extends KPI
 
 
     //TODO will need to find a way to make this private (security)
-    function getAllUsersAuth() : array
+    function getAllUsersAuth() : Collection
     {
         // This will get all users registred in the database
         $users = GoogleUser::all();
         // This filtering will take only necessary elements like name and access_token for each user.
-        return (array) $users->map(fn ($user) => [
+        return $users->map(fn ($user) => (object) [
             'name' => $user->name,
             'access_token' =>  $this->getUserAccessToken($user->refreshToken)
         ]);
