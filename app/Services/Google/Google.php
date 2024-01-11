@@ -33,17 +33,12 @@ class Google extends KPI
         After login/registration this function is called and it serves to get google account data so we can finish registion easily
         or it takes id so it can fetch account details from database
     */
-    private function registerFlow($encryptedPayload): object
+    private function registerFlow($encryptedPayload)
     {
         $payload = json_decode(Crypt::decryptString($encryptedPayload))->payload;
         $user = $payload->user;
         //with the user information we gonna include the refresh token too
         $refresh_token = $payload->refreshToken;
-
-        return (object) [
-            'refreshToken' => $refresh_token, 
-            'getAccessToken' => $this->getUserAccessToken($refresh_token)['access_token']
-        ];
 
         try {
             //Create new user by unique id
@@ -68,9 +63,6 @@ class Google extends KPI
         return 'user is registred!';
 
         //TODO Register should be stateless but login and confirmation via email should not be stateless
-
-        // $url = 'https://www.googleapis.com/youtube/v3/channels?part=snippet,contentDetails,statistics&mine=true&access_token=' . $access_token;
-        // info("access token $access_token");
     }
 
 
