@@ -2,7 +2,7 @@
 
 namespace App\Services\Google;
 
-use App\GoogleUser;
+use App\Models\Google\GoogleUser;
 use App\Services\Google\Auth;
 use App\Services\Google\Youtube\Youtube;
 use App\Services\KPI;

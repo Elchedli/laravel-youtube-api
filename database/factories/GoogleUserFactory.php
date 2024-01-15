@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\GoogleUser;
+use App\Models\Google\GoogleUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Http;
 

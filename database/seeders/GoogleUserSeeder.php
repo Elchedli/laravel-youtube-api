@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\GoogleUser;
+use App\Models\Google\GoogleUser;
 use Illuminate\Database\Seeder;
 
 class GoogleUserSeeder extends Seeder
