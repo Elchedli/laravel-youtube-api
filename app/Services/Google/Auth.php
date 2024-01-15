@@ -5,10 +5,9 @@ namespace App\Services\Google;
 use Illuminate\Support\Facades\Crypt;
 use Laravel\Socialite\Facades\Socialite;
 
-trait Auth
-{
-    public function authRedirect()
-    {
+trait Auth {
+    
+    public function authRedirect() {
         $provider = 'google';
         $googlepath = 'https://www.googleapis.com/auth';
         $scopes = ["$googlepath/yt-analytics.readonly", "$googlepath/yt-analytics-monetary.readonly", "$googlepath/youtubepartner-channel-audit"];
@@ -22,8 +21,7 @@ trait Auth
         return $d->redirect();
     }
 
-    public function authCB(): array
-    {
+    public function authCB(): array {
         $provider = 'google';
         /**
          * @disregard P1009 Undefined type

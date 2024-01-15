@@ -5,19 +5,17 @@ namespace App\Models\Google;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GoogleUser extends Model
-{
+class GoogleUser extends Model {
     use HasFactory;
 
     protected $fillable = [
-        'id', 
-        'name', 
-        'email', 
-        'thumbnailURL', 
+        'id',
+        'name',
+        'email',
+        'thumbnailURL',
         'refreshToken'
     ];
 
-    public function googleUser()
-    {
+    public function googleUser() {
     }
 }
