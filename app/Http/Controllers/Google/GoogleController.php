@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\FetchingData;
+namespace App\Http\Controllers\Google;
 
 use App\Http\Controllers\Controller;
 use App\Services\Google\Google;
@@ -15,7 +15,8 @@ class GoogleController extends Controller {
 
     //those are controllers functions 
     public function testphp() {
-        return $this->fetchYoutubeUsersData();
+        return "hello";
+        // return $this->fetchYoutubeUsersData();
     }
 
 

@@ -12,7 +12,7 @@ class CreateGoogleUsersTable extends Migration {
      */
     public function up(): void {
         Schema::create('google_users', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->string('googleX_id')->primary();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('thumbnailURL');

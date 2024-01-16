@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Google;
 
 use App\Models\Google\GoogleUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -25,7 +25,7 @@ class GoogleUserFactory extends Factory {
 
 
         return [
-            'id' => $this->faker->phoneNumber(),
+            'googleX_id' => $this->faker->phoneNumber(),
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'thumbnailURL' => $this->getRedirectedUrl(),

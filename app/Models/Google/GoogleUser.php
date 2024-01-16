@@ -9,13 +9,14 @@ class GoogleUser extends Model {
     use HasFactory;
 
     protected $fillable = [
-        'id',
+        'googleX_id',
         'name',
         'email',
         'thumbnailURL',
         'refreshToken'
     ];
 
-    public function googleUser() {
+    public function youtubeChannels(){
+        return $this->hasMany(YoutubeChannel::class);
     }
 }
