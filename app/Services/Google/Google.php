@@ -2,29 +2,28 @@
 
 namespace App\Services\Google;
 
-use App\GoogleUser;
+use App\Models\Google\GoogleUser;
 use App\Services\Google\Auth;
 use App\Services\Google\Youtube\Youtube;
 use App\Services\KPI;
+use Illuminate\Support\Collection;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 
-class Google extends KPI
-{
+class Google extends KPI {
+    
     use Auth;
 
     private Youtube $youtube;
 
-    function __construct()
-    {
+    function __construct() {
         $this->youtube = new Youtube();
     }
 
-    public function Service($serviceChoice): Youtube
-    {
+    public function Service($serviceChoice): Youtube {
         return match ($serviceChoice) {
-            'youtube' => $this->youtube, 
+            'youtube' => $this->youtube,
             //Add analytics after
         };
     }
@@ -33,8 +32,7 @@ class Google extends KPI
         After login/registration this function is called and it serves to get google account data so we can finish registion easily
         or it takes id so it can fetch account details from database
     */
-    private function registerFlow($encryptedPayload)
-    {
+    private function registerFlow($encryptedPayload) {
         $payload = json_decode(Crypt::decryptString($encryptedPayload))->payload;
         $user = $payload->user;
         //with the user information we gonna include the refresh token too
@@ -67,20 +65,18 @@ class Google extends KPI
 
 
     //TODO will need to find a way to make this private (security)
-    function getAllUsersAuth() : array
-    {
+    function getAllUsersAuth(): Collection {
         // This will get all users registred in the database
         $users = GoogleUser::all();
         // This filtering will take only necessary elements like name and access_token for each user.
-        return (array) $users->map(fn ($user) => [
+        return $users->map(fn ($user) => (object) [
             'name' => $user->name,
             'access_token' =>  $this->getUserAccessToken($user->refreshToken)
         ]);
     }
 
     //This function give an access_token from a refresh_token which is a permanent key linked with your api key so no one can use except you.
-    private function getUserAccessToken($refresh_token)
-    {
+    private function getUserAccessToken($refresh_token) {
         $response = Http::asForm()->post('https://oauth2.googleapis.com/token', [
             'grant_type' => 'refresh_token',
             'refresh_token' => $refresh_token,

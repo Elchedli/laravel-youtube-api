@@ -2,12 +2,11 @@
 
 namespace Database\Factories;
 
-use App\GoogleUser;
+use App\Models\Google\GoogleUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Http;
 
-class GoogleUserFactory extends Factory
-{
+class GoogleUserFactory extends Factory {
 
     /**
      * The name of the factory's corresponding model
@@ -22,8 +21,7 @@ class GoogleUserFactory extends Factory
      *
      * @return array
      */
-    public function definition(): array
-    {
+    public function definition(): array {
 
 
         return [
@@ -36,15 +34,10 @@ class GoogleUserFactory extends Factory
     }
 
 
-    private function getRedirectedUrl() : string
-    {
+    private function getRedirectedUrl(): string {
         $originalUrl = 'https://source.unsplash.com/random/800x600';
         $response = (object) Http::get($originalUrl);
         $img = $response->transferStats->getHandlerStats()['url'];
         return $img;
     }
 }
-
-
-
-
