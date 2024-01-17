@@ -13,11 +13,10 @@ class CreateYoutubeChannelsTable extends Migration {
     public function up() {
         Schema::create('youtube_channels', function (Blueprint $table) {
             $table->string('channel_id')->primary(); // primary key
-            $table->string('googleX_id')->nullable();
+            $table->string('google_user_id'); // foreign key for the google user
             $table->json('channel_info'); //contains channel basic informations
             $table->json('videos_infoTable')->nullable(); //Contains channel videos informatons by type
             $table->json('analytics_info')->nullable(); //contain channel
-            $table->timestamps();
         });
     }
 

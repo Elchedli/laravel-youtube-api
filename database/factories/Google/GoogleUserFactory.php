@@ -25,7 +25,7 @@ class GoogleUserFactory extends Factory {
 
 
         return [
-            'googleX_id' => $this->faker->phoneNumber(),
+            'google_id' => $this->faker->phoneNumber(),
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'thumbnailURL' => $this->getRedirectedUrl(),

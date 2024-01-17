@@ -3,57 +3,74 @@
 namespace Database\Factories\Google;
 
 use App\Models\Google\GoogleUser;
+use App\Models\Google\YoutubeChannel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use stdClass;
 
 class YoutubeChannelFactory extends Factory {
+
+    /**
+     * The name of the factory's corresponding model
+     *
+     * @var string
+     */
+
+    protected $model = YoutubeChannel::class;
     /**
      * Define the model's default state.
      *
      * @return array
      */
     public function definition() {
-        
+
         return [
             'channel_id' => $this->faker->jobTitle(),
-            'googleX_id' => GoogleUser::factory(),
-            'channel_info' => $this->generateObject(1),
-            'videos_infoTable' => $this->generateObject(2),
-            'analytics_info' => $this->generateObject(3)
+            'google_user_id' => GoogleUser::factory(),
+            'channel_info' => $this->generateNestedObject(1),
+            'videos_infoTable' => $this->generateNestedObject(2),
+            'analytics_info' => $this->generateNestedObject(3)
         ];
     }
 
 
+    /**
+     * Generate a nested stdClass object with a specified depth.
+     *
+     * @param int $depth The depth of the nested object.
+     * @return stdClass The generated object.
+     */
+    private function generateNestedObject(int $depth = 3): stdClass {
+        // Create a new stdClass object.
+        $nestedObject = new stdClass();
 
+        // Determine the number of properties for the object.
+        $propertyCount = $this->faker->numberBetween(1, 5);
 
+        // Generate properties for the object.
+        for ($i = 0; $i < $propertyCount; $i++) {
+            // Generate a random word for the property name.
+            $propertyName = $this->faker->word;
 
-    //this generate objects inside objects by depth
-    private function generateObject(int $depth = 3) {
-        
-        $object = new stdClass();
+            // If the current depth is greater than 1, generate a nested object for the property value.
+            // Otherwise, generate a random word for the property value.
+            $propertyValue = $depth > 1 ? $this->generateNestedObject($depth - 1) : $this->faker->word;
 
-        $numProperties = $this->faker->numberBetween(1, 5);
-
-        for ($i = 0; $i < $numProperties; $i++) {
-            $key = $this->faker->word;
-            $value = $depth > 1 ? $this->generateObject($depth - 1) : $this->faker->word;
-
-            $object->$key = $value;
+            // Assign the property value to the property name in the object.
+            $nestedObject->$propertyName = $propertyValue;
         }
 
-        return $object;
+        // Return the generated object.
+        return $nestedObject;
     }
 
 
+    //This can be used for testing purposes (unused function)
+    private function testObject() {
 
-
-
-
-    //This can be used for testing purposes
-    private function testObject(){
-        
         $username = $this->faker->userName();
         $userAgent = $this->faker->userAgent();
+
+        //EOD is basically `` in javascript
         return <<<EOD
         {
             "content": [
