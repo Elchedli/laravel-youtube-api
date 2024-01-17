@@ -14,6 +14,8 @@ class GoogleUser extends Model {
     //this is needed so when i seed the database for testing Eloquant will wait for for the database
     public $incrementing = false;
 
+    //this disables created_at and modified_at
+    public $timestamps = false;
 
     //this is used to get nested relation table youtubeChannels without using Model::with('youtubeChannels')->get();
     protected static function booted() {

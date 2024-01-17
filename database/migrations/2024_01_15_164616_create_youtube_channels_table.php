@@ -16,7 +16,7 @@ class CreateYoutubeChannelsTable extends Migration {
             $table->string('google_user_id'); // foreign key for the google user
             $table->json('channel_info'); //contains channel basic informations
             $table->json('videos_infoTable')->nullable(); //Contains channel videos informatons by type
-            $table->json('analytics_info')->nullable(); //contain channel
+            $table->json('analytics_info')->nullable(); //contain channel anayltics
         });
     }
 
