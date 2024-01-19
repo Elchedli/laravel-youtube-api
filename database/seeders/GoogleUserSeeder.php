@@ -13,7 +13,13 @@ class GoogleUserSeeder extends Seeder {
      */
     public function run(): void {
         GoogleUser::factory()
-            ->count(10)
-            ->create();
+        ->count(1)
+        ->hasYoutubeChannels(1)
+        ->create();
+
+        GoogleUser::factory()
+        ->count(2)
+        ->hasYoutubeChannels(2)
+        ->create();
     }
 }

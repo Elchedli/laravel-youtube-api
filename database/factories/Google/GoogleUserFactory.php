@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Factories;
+namespace Database\Factories\Google;
 
 use App\Models\Google\GoogleUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -23,9 +23,8 @@ class GoogleUserFactory extends Factory {
      */
     public function definition(): array {
 
-
         return [
-            'id' => $this->faker->phoneNumber(),
+            'google_id' => $this->faker->phoneNumber(),
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'thumbnailURL' => $this->getRedirectedUrl(),
@@ -34,10 +33,13 @@ class GoogleUserFactory extends Factory {
     }
 
 
+    // This function get the redirected url for this specific website
     private function getRedirectedUrl(): string {
+        
         $originalUrl = 'https://source.unsplash.com/random/800x600';
         $response = (object) Http::get($originalUrl);
         $img = $response->transferStats->getHandlerStats()['url'];
+        
         return $img;
     }
 }

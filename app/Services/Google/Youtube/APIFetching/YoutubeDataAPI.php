@@ -6,11 +6,18 @@ use Illuminate\Support\Facades\Http;
 
 
 trait YoutubeDataAPI {
-    // this function get the basic information of a channel,the most important parts are statistics(viewCount,SubscriberCounts...)
-    // In contentDetails that we added from $part we gonna get uploads id which give a playlist containing all videos/shorts/recorded lives in the channel
-    private function getChannelData($access_token) {
+    
+    private function getOwnChannels($access_token){
         $part = 'snippet,id,statistics';
         $url = "$this->youtubeEndPoint/channels?part=$part&key=$this->apiKey&mine=true&access_token=$access_token";
+        return json_decode(Http::get($url));
+    }
+    
+    // this function get the basic information of a channel,the most important parts are statistics(viewCount,SubscriberCounts...)
+    // In contentDetails that we added from $part we gonna get uploads id which give a playlist containing all videos/shorts/recorded lives in the channel
+    private function getChannelInfo($access_token_channel) {
+        $part = 'snippet,id,statistics';
+        $url = "$this->youtubeEndPoint/channels?part=$part&key=$this->apiKey&mine=true&access_token=$access_token_channel";
         return json_decode(Http::get($url));
     }
 
@@ -68,4 +75,13 @@ trait YoutubeDataAPI {
 
         return !empty($allVideosIDs) ? $this->getVideosContent($allVideosIDs) : null;
     }
+
+
+    //TEST this is a testing function
+    // public function getChannelsContent($access_token){
+    //     $userChannels = $this->getOwnChannels($access_token);
+    //     dd($userChannels);
+    // }
+
+
 }

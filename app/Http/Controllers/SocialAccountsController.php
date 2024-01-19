@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Services\KPI;
-use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 
 class SocialAccountsController extends Controller {
     
     /**
      * @throws \Exception
      */
-    public function auth($provider): RouteServiceProvider {
+    public function auth($provider): RedirectResponse {
         return KPI::getDriver($provider)->authRedirect();
     }
 

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\SocialAccountsController;
-use App\Http\Controllers\FetchingData\GoogleController;
+use App\Http\Controllers\Google\GoogleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
