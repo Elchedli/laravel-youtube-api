@@ -39,6 +39,9 @@ class Google extends KPI {
         $refresh_token = $payload->refreshToken;
 
         try {
+            //TODO need to delete this after (this is just for testing)
+            // $token = $this->getUserAccessToken($refresh_token);
+            // $testData = $this->youtube->getChannelsContent($this->getUserAccessToken($token));
             //Create new user by unique id
             $user = GoogleUser::create([
                 'id' => $user->id,

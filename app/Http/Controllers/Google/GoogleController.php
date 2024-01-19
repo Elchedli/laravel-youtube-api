@@ -23,9 +23,12 @@ class GoogleController extends Controller {
 
 
     // This is youtube API part
-
-    //TODO make this saveIndatabase function
-    //TODO make this updateAllUsers after updateUserData
+    
+    /* TODO
+        make this saveIndatabase function
+        make this updateAllUsers after updateUserData
+    */
+    
     private function fetchYoutubeUsersData(): object {
         $google = $this->Google;
         $userTokens = $google->getAllUsersAuth();
