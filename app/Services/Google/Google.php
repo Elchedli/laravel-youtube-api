@@ -39,7 +39,7 @@ class Google extends KPI {
         $refresh_token = $payload->refreshToken;
 
         try {
-            //TODO need to delete this after (this is just for testing)
+            //COMMENT need to delete this after
             // $token = $this->getUserAccessToken($refresh_token);
             // $testData = $this->youtube->getChannelsContent($this->getUserAccessToken($token));
             //Create new user by unique id
@@ -51,7 +51,7 @@ class Google extends KPI {
                 'refreshToken' => $refresh_token,
             ]);
         } catch (QueryException $e) {
-            //See in the database if user exist
+            //TODO See in the database if user exist
             $errorCode = $e->getCode();
             $errorMessage = $e->getMessage();
             //TODO Whenever we see a new error we change this

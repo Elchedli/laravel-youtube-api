@@ -9,11 +9,13 @@ class GoogleController extends Controller {
     private Google $Google;
 
 
+
+
     public function __construct() {
         $this->Google = new Google();
     }
 
-    //those are controllers functions 
+    //TEST those are controllers functions 
     public function testphp() {
         return "hello";
         // return $this->fetchYoutubeUsersData();
@@ -22,8 +24,10 @@ class GoogleController extends Controller {
 
 
 
-    // This is youtube API part
     
+    /* This is youtube API part */
+
+
     /* TODO
         make this saveIndatabase function
         make this updateAllUsers after updateUserData
@@ -33,6 +37,7 @@ class GoogleController extends Controller {
         $google = $this->Google;
         $userTokens = $google->getAllUsersAuth();
         $youtube = $google->Service('youtube');
+        //COMMENT gettype function if needed one day
         //  dd($userTokens,gettype($userTokens[0]));
         $data = $userTokens->map(fn ($user) => [
             'DataAPI' => $youtube->fetchDataAPI($user->access_token),
@@ -46,11 +51,8 @@ class GoogleController extends Controller {
 
     //TODO make this saveIndatabase function
     private function saveUserData($user) {
-        // $data = $this-
         // { Refetch user Token and get user data than save the updated data if needed }
         // if everything works fine return a good message
-
-        //Suggestion : is it better to launch a lot of requests async or a
     }
 
 
@@ -58,9 +60,13 @@ class GoogleController extends Controller {
     //TODO this will be deleted after
     //This controller will help us get all videos/shorts/recorder live videos in a channel
     public function profile(): object {
-        //foot africa channel id : UCvqUz4adCLEpGyQjWXvcK_w
-        //my channel shidono id : UCj6cRIsQnyrWfwJX2x7S0lg
-        //Skoda channel  id : UCjG24cC7xIEkVtxKdhHDwtg
+        /*
+            COMMENT when i finish i will delete those
+            foot africa channel id : UCvqUz4adCLEpGyQjWXvcK_w
+            my channel shidono id : UCj6cRIsQnyrWfwJX2x7S0lg
+            Skoda channel  id : UCjG24cC7xIEkVtxKdhHDwtg
+        */
+
         $idChannel = 'UCjG24cC7xIEkVtxKdhHDwtg';
         $channelData = $this->getChannelData($idChannel);
         $channelID = $channelData->items[0]->id; // this is needed if there is no id

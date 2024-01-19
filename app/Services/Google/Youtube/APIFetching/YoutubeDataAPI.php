@@ -77,7 +77,7 @@ trait YoutubeDataAPI {
     }
 
 
-    //TODO this is a testing function
+    //TEST this is a testing function
     // public function getChannelsContent($access_token){
     //     $userChannels = $this->getOwnChannels($access_token);
     //     dd($userChannels);

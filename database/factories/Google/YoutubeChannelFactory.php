@@ -33,12 +33,8 @@ class YoutubeChannelFactory extends Factory {
     }
 
 
-    /**
-     * Generate a nested stdClass object with a specified depth.
-     *
-     * @param int $depth The depth of the nested object.
-     * @return stdClass The generated object.
-     */
+
+    //HACK Generate a nested stdClass object with a specified depth.
     private function generateNestedObject(int $depth = 3): stdClass {
         // Create a new stdClass object.
         $nestedObject = new stdClass();
@@ -64,7 +60,7 @@ class YoutubeChannelFactory extends Factory {
     }
 
 
-    //This can be used for testing purposes (unused function)
+    //HACK TThis can be used for testing purposes (unused function)
     private function testObject() {
 
         $username = $this->faker->userName();
